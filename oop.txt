@@ -1,0 +1,440 @@
+NAMA : DITA ADETIA NADILA
+NIM : D1041161028
+
+1. Modifier (min3)
+  a. private String name;
+     private String KEY_NAME = "NAMA";
+  b. public static final String EXTRA_MESSAGE =
+            "com.demo.android.twoactivitie28.extra.MESSAGE";
+     private EditText mMessageEditText;
+     public static final int TEXT_REQUEST = 1;
+     private TextView mReplyHeadTextView;
+     private TextView mReplyTextView;
+     private static final String LOG_TAG =
+            MainActivity.class.getSimpleName();
+  c. public static final String EXTRA_REPLY =
+            "com.demo.android.twoactivitie_28.extra.REPLY";
+     private EditText mReply;
+
+2. Method (min4)
+  a. public void returnReply(View view) {
+        String reply = mReply.getText().toString();
+        Intent replyIntent = new Intent();
+        replyIntent.putExtra(EXTRA_REPLY, reply);
+        setResult(RESULT_OK,replyIntent);
+        finish();
+    }
+
+  b. @Override
+    public void onActivityResult(int requestCode,
+                                 int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == TEXT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                String reply = data.getStringExtra(SecondActivity.EXTRA_REPLY);
+                mReplyHeadTextView.setVisibility(View.VISIBLE);
+                mReplyTextView.setText(reply);
+                mReplyTextView.setVisibility(View.VISIBLE);
+            }
+        }
+  c. public void launchSecondActivity(View view) {
+        Log.d(LOG_TAG, "Button clicked!");
+        Intent intent = new Intent(this, SecondActivity.class);
+        String message = mMessageEditText.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivityForResult(intent, TEXT_REQUEST);
+    }
+    }
+  d.  @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Button tombol = (Button) findViewById(R.id.buttontoast);
+        tombol.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Tombol Toast Telah Berhasil",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        tombol2=findViewById(R.id.buttoncount);
+        result=findViewById(R.id.hasil);
+        angka=0;
+        tombol2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                angka=angka+1;
+                result.setText(String.valueOf(angka));
+            }
+        });
+    }
+
+3. Class (min2)
+  a. public class count extends AppCompatActivity {
+    TextView txtHello;
+    private String name;
+    private String KEY_NAME = "NAMA";
+
+    Button countup,countdown;
+    int counter;
+    TextView nilai;
+    Context context;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_count);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        txtHello = (TextView) findViewById(R.id.halo);
+
+        Bundle extras = getIntent().getExtras();
+        name = extras.getString(KEY_NAME);
+        txtHello.setText("Hallo " + name);
+
+        context = this;
+        counter=28;
+
+        countup = (Button)findViewById(R.id.countup);
+        countdown = (Button)findViewById(R.id.countdown);
+        nilai = (TextView)findViewById(R.id.number);
+        nilai.setText(""+counter);
+
+        countup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counter++;
+                nilai.setText(""+counter);
+            }
+        });
+
+        countdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counter--;
+                nilai.setText(""+counter);
+            }
+        });
+    }
+}
+  b. public class MainActivity extends AppCompatActivity {
+    Button btnlanjut;
+    EditText nama;
+
+    private String KEY_NAME = "NAMA";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        nama = (EditText) findViewById(R.id.etnama);
+        btnlanjut = (Button)findViewById(R.id.btnlanjut);
+
+        btnlanjut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    String name = nama.getText().toString();
+                    if (name != null && name != ""){
+                        Intent i = new Intent(MainActivity.this, count.class);
+                        i.putExtra(KEY_NAME, name);
+                        startActivity(i);
+
+                    } else {
+                        Toast.makeText(getApplication(), "YOU NEED TO FILL YOUR NAME",Toast.LENGTH_SHORT);
+                    }
+
+                } catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(getApplication(), "ERROR, TRY AGAIN !",Toast.LENGTH_SHORT);
+                }
+
+            }
+        });
+    }
+}
+  c. public class MainActivity extends AppCompatActivity {
+    Button tombol,tombol2;
+    int angka;
+    TextView result;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Button tombol = (Button) findViewById(R.id.buttontoast);
+        tombol.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Tombol Toast Telah Berhasil",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        tombol2=findViewById(R.id.buttoncount);
+        result=findViewById(R.id.hasil);
+        angka=0;
+        tombol2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                angka=angka+1;
+                result.setText(String.valueOf(angka));
+            }
+        });
+    }
+}
+  d. public class SecondActivity extends AppCompatActivity {
+    public static final String EXTRA_REPLY =
+            "com.demo.android.twoactivitie_28.extra.REPLY";
+    private EditText mReply;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+        Intent intent = getIntent();
+        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        TextView textView = findViewById(R.id.text_message);
+        textView.setText(message);
+        mReply = findViewById(R.id.editText_second);
+    }
+
+    public void returnReply(View view) {
+        String reply = mReply.getText().toString();
+        Intent replyIntent = new Intent();
+        replyIntent.putExtra(EXTRA_REPLY, reply);
+        setResult(RESULT_OK,replyIntent);
+        finish();
+    }
+}
+  e.public class MainActivity extends AppCompatActivity {
+    Button tombol,tombol2;
+    int angka;
+    TextView result;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Button tombol = (Button) findViewById(R.id.buttontoast);
+        tombol.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Tombol Toast Telah Berhasil",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        tombol2=findViewById(R.id.buttoncount);
+        result=findViewById(R.id.hasil);
+        angka=0;
+        tombol2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                angka=angka+1;
+                result.setText(String.valueOf(angka));
+            }
+        });
+    }
+}
+
+4. Function (min.3)
+  a. public void onClick(View v) {
+                angka=angka+1;
+                result.setText(String.valueOf(angka));
+            }
+  b. countup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counter++;
+                nilai.setText(""+counter);
+            }
+        });
+  c. countdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counter--;
+                nilai.setText(""+counter);
+            }
+        });
+
+5. Constructor (min.2)
+  a.public class MainActivity extends AppCompatActivity {
+    public static final String EXTRA_MESSAGE =
+            "com.demo.android.twoactivitie28.extra.MESSAGE";
+    private EditText mMessageEditText;
+    public static final int TEXT_REQUEST = 1;
+    private TextView mReplyHeadTextView;
+    private TextView mReplyTextView;
+
+    private static final String LOG_TAG =
+            MainActivity.class.getSimpleName();
+
+  b.public class count extends AppCompatActivity {
+    TextView txtHello;
+    private String name;
+    private String KEY_NAME = "NAMA";
+
+    Button countup,countdown;
+    int counter;
+    TextView nilai;
+    Context context;
+
+  c.public class MainActivity extends AppCompatActivity {
+    Button btnlanjut;
+    EditText nama;
+
+    private String KEY_NAME = "NAMA";
+
+6. Polimorfisme(min.3)
+  a.//Superclass
+class hewan{
+    
+}
+
+//Subclass Pertama
+class kucing extends hewan{
+    
+}
+
+//Subclass Kedua
+class singa extends hewan{
+    
+}
+
+//Kelas Utama/Main
+public class karnivora {
+    public static void main(String[] args){
+        
+    }
+}
+
+
+Selanjutnya pada class hewan akan kita tambahkan beberapa atibut seperti variable dan method, dan pada masing-masing subclass akan menggunakan nama method yang sama dengan kelas induk mereka tetapi memiliki fungsi yang berbeda.
+
+//Superclass
+class hewan{
+    
+    //Method Default
+    void setNama(){
+        String hewan = "Tidak Bernama";
+        System.out.println("Nama Hewan: "+hewan);
+    }
+    void setSuara(){
+        String suara = "Tidak Bersuara";
+        System.out.println("Suara Hewan: "+suara);
+    }
+    void setBerat(){
+        double berat = 0.0;
+        System.out.println("berat Hewan: "+berat+" Kg");
+    }
+}
+
+//Subclass Pertama
+class kucing extends hewan{
+    
+    @Override
+    void setNama(){
+        String kucing = "Carberus";
+        System.out.println("Nama Kucing: "+kucing);
+    }
+    @Override
+    void setSuara(){
+        String suara = "Miaw Meow Meong";
+        System.out.println("Suara Kucing: "+suara);
+    }
+    @Override
+    void setBerat(){
+        double berat = 2.0;
+        System.out.println("berat Kucing: "+berat+" Kg");
+    }
+}
+
+//Subclass Kedua
+class singa extends hewan{
+   
+    @Override
+    void setNama(){
+        String singa = "Diablo";
+        System.out.println("Nama Singa: "+singa);
+    }
+    @Override
+    void setSuara(){
+        String suara = "Roaaarrrr";
+        System.out.println("Suara Singa: "+suara);
+    }
+    @Override
+    void setBerat(){
+        double berat = 10.0;
+        System.out.println("berat Singa: "+berat+" Kg");
+    } 
+}
+
+
+b.public class Polimorphism {
+ 
+   public static void main(String[ ] args) {
+ 
+      cetakObyek(new Balok());
+      cetakObyek(new PersegiPanjang());
+      cetakObyek(new BangunDatar());
+      cetakObyek(new Object());
+   }
+    
+   public static void cetakObyek(Object obyek) {
+      System.out.println(obyek);
+   }
+ 
+} // Akhir kelas Polimorphism
+ 
+class Balok extends PersegiPanjang {
+   public String toString() {
+      return "Mempunyai sisi panjang, lebar dan tinggi";
+   }
+}
+ 
+class PersegiPanjang extends BangunDatar {
+   public String toString() {
+      return "Mempunyai sisi panjang dan lebar";
+   }
+}
+ 
+class BangunDatar extends Object {
+   public String toString() {
+      return "Mempunyai berbagai bentuk";
+   }
+}
+
+c.public class karnivora {
+    public static void main(String[] args){
+        //Cara Penulisan Objek: (superclass) variable = new (subclass);
+        System.out.println("===== HEWAN DEFAULT =====");
+        hewan h = new hewan();
+        h.setNama();
+        h.setSuara();
+        h.setBerat();
+        
+        System.out.println("===== HEWAN KUCING =====");
+        hewan k = new kucing();
+        k.setNama();
+        k.setSuara();
+        k.setBerat();
+        
+        System.out.println("===== HEWAN SINGA =====");
+        hewan s = new singa();
+        s.setNama();
+        s.setSuara();
+        s.setBerat();
+    }
+}
+
+7. Inheritence(min.3)
+  a.super.onCreate(savedInstanceState); //pada 28_tugasToastactiv\MainActivity.java
+  b.super.onCreate(savedInstanceState); //pada Twoactivities_28\MainActivity.java
+  c.super.onActivityResult(requestCode, resultCode, data);
+  d.public class MainActivity extends AppCompatActivity {
